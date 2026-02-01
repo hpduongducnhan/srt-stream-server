@@ -1,0 +1,35 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test files
+*_test.go
+*.test
+
+# Documentation
+*.md
+!README.md
+
+# Secrets (don't include in image)
+secret.txt
+
+# Local development
+docker-compose.yml
+data/
+
+# Temporary files
+*.tmp
+*.log
+*.bak

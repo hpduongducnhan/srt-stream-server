@@ -1,0 +1,42 @@
+services:
+  srs:
+    image: ossrs/srs:6
+    container_name: streaming-server
+    restart: unless-stopped
+    ports:
+      # RTMP port
+      - "1935:1935"
+      # HTTP API port
+      - "1985:1985"
+      # HTTP Server port (HTTP-FLV, HLS)
+      - "18080:8080"
+      # SRT port (UDP)
+      - "10080:10080/udp"
+    volumes:
+      - ./srt.conf:/usr/local/srs/conf/srt.conf
+      # - ./data:/usr/local/srs/objs
+    entrypoint: ["/usr/local/srs/objs/srs"]
+    command: ["-c", "/usr/local/srs/conf/srt.conf"]
+    environment:
+      - CANDIDATE=0.0.0.0
+    networks:
+      - stream-network
+
+  # oryx:
+  #   image: ossrs/oryx:5
+  #   container_name: srs-oryx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "22022:2022"
+  #     - "22443:2443"
+  #     - "11935:1935"
+  #     - "28000:8000"
+  #     - "20080:10080"
+  #   environment:
+  #     - MGMT_PASSWORD=02011993
+  #   networks:
+  #     - srs-network
+
+networks:
+  stream-network:
+    driver: bridge
