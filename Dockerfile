@@ -1,10 +1,21 @@
 # Stage 1: Build Go application
-FROM golang:1.25-alpine3.23 AS builder
+FROM ubuntu:20.04 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /build
 
-# Install build dependencies (gcc, musl-dev required for CGO/sqlite3)
-RUN apk add --no-cache git ca-certificates gcc musl-dev
+# Install Go and build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget git ca-certificates gcc libc6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Go 1.25
+RUN wget -q https://go.dev/dl/go1.25.0.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go1.25.0.linux-amd64.tar.gz \
+    && rm go1.25.0.linux-amd64.tar.gz
+
+ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Copy go mod files first for better caching
 COPY mgmt/go.mod mgmt/go.sum* ./

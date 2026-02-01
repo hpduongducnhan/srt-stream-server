@@ -2,11 +2,16 @@ package app
 
 import (
 	"os"
+	"time"
 
 	"github.com/rs/zerolog"
 )
 
 func initLogger() zerolog.Logger {
+	// Cấu hình định dạng thời gian cho zerolog
+	zerolog.TimeFieldFormat = time.RFC3339
+	// Hoặc sử dụng định dạng tùy chỉnh: "2006-01-02 15:04:05"
+	// zerolog.TimeFieldFormat = "2006-01-02 15:04:05"
 	// logPath := os.Getenv("NDD_LOG_PATH")
 	// if logPath == "" {
 	// 	logPath, _ = os.Getwd()
